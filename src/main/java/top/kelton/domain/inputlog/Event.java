@@ -7,7 +7,7 @@ import lombok.Data;
 
 @XStreamAlias("event")
 @Data
-class Event {
+public class Event {
     private String type;
     private String id;
     private Part part;

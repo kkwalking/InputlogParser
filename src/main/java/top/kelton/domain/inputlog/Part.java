@@ -10,7 +10,7 @@ import lombok.Data;
 
 @XStreamAlias("part")
 @Data
-class Part {
+public class Part {
     @XStreamAsAttribute
     private String type;
     private String startTime;

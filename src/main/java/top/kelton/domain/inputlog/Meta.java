@@ -10,7 +10,7 @@ import lombok.Data;
 
 @XStreamAlias("meta")
 @Data
-class Meta {
+public class Meta {
     @XStreamImplicit
     private List<Entry> entries;
     @Override

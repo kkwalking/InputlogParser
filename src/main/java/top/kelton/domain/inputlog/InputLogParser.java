@@ -18,12 +18,46 @@ public class InputLogParser {
 
     private String fileUrl;
 
+    private Log log;
+
+    private Long startTimestamp;
+    private Long relativeTime;
+
 
     public InputLogParser(String fileUrl) {
         this.fileUrl = fileUrl;
     }
 
+    public Long getStartTimestamp() {
+        if (startTimestamp != null) return startTimestamp;
+        Meta meta = log.getMeta();
+        for (Entry entry : meta.getEntries()) {
+            if (entry.getKey().equalsIgnoreCase("__LogCreationTimeStamp")) {
+                this.startTimestamp = Long.parseLong(entry.getValue());
+                break;
+            }
+        }
+        return this.startTimestamp;
+    }
+
+    public Long getRelativeTime() {
+        if (relativeTime != null) return relativeTime;
+        Meta meta = log.getMeta();
+        for (Entry entry : meta.getEntries()) {
+            if (entry.getKey().equalsIgnoreCase("__LogRelativeCreationDate")) {
+                this.relativeTime = Long.parseLong(entry.getValue());
+                break;
+            }
+        }
+
+        return this.relativeTime;
+    }
+
     public Log getLog() {
+        if (log != null) {
+            return log;
+        }
+
         if (fileUrl == null) {
             throw new RuntimeException("idfx文件路径:[" + fileUrl + "]不存在");
         }
@@ -41,7 +75,7 @@ public class InputLogParser {
 
         // 添加安全配置：允许解析相关类
         XStream.setupDefaultSecurity(xStream);
-        xStream.allowTypesByWildcard(new String[]{
+        xStream.allowTypesByWildcard(new String[] {
                 "top.kelton.domain.inputlog.**"
         });
         Log log = null;
@@ -61,7 +95,8 @@ public class InputLogParser {
             e.printStackTrace();
             throw new RuntimeException("idfx文件处理异常, url:" + fileUrl);
         }
-        return log;
+        this.log = log;
+        return this.log;
     }
 
 

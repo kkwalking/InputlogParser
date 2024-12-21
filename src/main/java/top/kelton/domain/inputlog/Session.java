@@ -10,7 +10,7 @@ import lombok.Data;
 
 @XStreamAlias("session")
 @Data
-class Session {
+public class Session {
     @XStreamImplicit
     private List<Entry> entries;
     @Override
